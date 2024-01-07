@@ -1,0 +1,106 @@
+"use client";
+import React from "react";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { registerUser } from "@/actions/userRegister";
+import { toast } from "./ui/use-toast";
+import LoadingButton from "./LoadingButton";
+
+const AuthForm = ({ type }: any) => {
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [query, setQuery] = React.useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = () => (e: any) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setQuery((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    if (type === "register") {
+      try {
+        await registerUser({
+          name: query.name,
+          email: query.email,
+          password: query.password,
+        });
+
+        setIsSubmitting(false);
+        toast({
+          title: "Registration Success",
+          description: "You have successfully registered",
+        });
+      } catch (error: any) {
+        setIsSubmitting(false);
+
+        toast({
+          title: "Registration Failed",
+          description: `${error.message}`,
+        });
+      }
+    } else {
+      console.log("login");
+    }
+  };
+
+  return (
+    <>
+      {type === "register" ? (
+        <div className="grid gap-2">
+          <Label htmlFor="name">Name</Label>
+          <Input
+            id="name"
+            name="name"
+            type="text"
+            placeholder="Swapnil Patel"
+            onChange={handleChange()}
+          />
+        </div>
+      ) : null}
+
+      <div className="grid gap-2">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          name="email"
+          placeholder="m@example.com"
+          onChange={handleChange()}
+        />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="password">Password</Label>
+        <Input
+          id="password"
+          type="password"
+          onChange={handleChange()}
+          name="password"
+        />
+      </div>
+      {type === "register" ? (
+        <LoadingButton
+          type="submit"
+          loading={isSubmitting}
+          onClick={handleSubmit}
+        >
+          Register
+        </LoadingButton>
+      ) : (
+        <Button type="submit" className="w-full">
+          Login
+        </Button>
+      )}
+    </>
+  );
+};
+
+export default AuthForm;
