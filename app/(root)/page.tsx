@@ -1,4 +1,5 @@
 import JobFilterSidebar from "@/components/JobLeftSidebar";
+import JobResults from "@/components/JobResults";
 import H1 from "@/components/ui/h1";
 import { JobFilterValues } from "@/lib/validation";
 import Image from "next/image";
@@ -31,10 +32,10 @@ export default function Home({
       </div>
       <section className="flex flex-col gap-4 md:flex-row">
         <JobFilterSidebar defaultValues={filterValues} />
-        {/* <JobResults
+        <JobResults
           filterValues={filterValues}
           page={page ? parseInt(page) : undefined}
-        /> */}
+        />
       </section>
     </main>
   );
