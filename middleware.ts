@@ -12,9 +12,9 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  if (session) {
-    if (path === "/login") {
-      return NextResponse.redirect(new URL("/", req.url));
-    }
-  }
+  //   if (session) {
+  //     if (path === "/login") {
+  //       return NextResponse.redirect(new URL("/", req.url));
+  //     }
+  //   }
 }

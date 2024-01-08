@@ -12,6 +12,13 @@ export function formatMoney(amount: number) {
   }).format(amount);
 }
 
+export function toSlug(str: string) {
+  return str
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^\w-]+/g, "");
+}
+
 export function relativeDate(from: Date) {
   return formatDistanceToNowStrict(from, { addSuffix: true });
 }

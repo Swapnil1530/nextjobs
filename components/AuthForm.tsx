@@ -38,11 +38,11 @@ const AuthForm = ({ type }: any) => {
         });
 
         setIsSubmitting(false);
+
         toast({
           title: "Registration Success",
           description: "You have successfully registered",
         });
-        router.push("/post");
       } catch (error: any) {
         setIsSubmitting(false);
 
@@ -67,6 +67,7 @@ const AuthForm = ({ type }: any) => {
           title: "Login Success",
           description: "You have successfully logged in",
         });
+        router.push("/post");
       } catch (error: any) {
         setIsSubmitting(false);
         toast({
