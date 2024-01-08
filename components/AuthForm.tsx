@@ -6,9 +6,12 @@ import { Button } from "./ui/button";
 import { registerUser } from "@/actions/userRegister";
 import { toast } from "./ui/use-toast";
 import LoadingButton from "./LoadingButton";
+import { signIn } from "next-auth/react";
+import { redirect, useRouter } from "next/navigation";
 
 const AuthForm = ({ type }: any) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const router = useRouter();
   const [query, setQuery] = React.useState({
     name: "",
     email: "",
@@ -39,6 +42,7 @@ const AuthForm = ({ type }: any) => {
           title: "Registration Success",
           description: "You have successfully registered",
         });
+        router.push("/post");
       } catch (error: any) {
         setIsSubmitting(false);
 
@@ -48,7 +52,29 @@ const AuthForm = ({ type }: any) => {
         });
       }
     } else {
-      console.log("login");
+      try {
+        const res = await signIn("credentials", {
+          redirect: false,
+          email: query.email,
+          password: query.password,
+        });
+        setIsSubmitting(false);
+        if (!res?.ok) {
+          throw new Error("Invalid Credentials");
+        }
+
+        toast({
+          title: "Login Success",
+          description: "You have successfully logged in",
+        });
+      } catch (error: any) {
+        setIsSubmitting(false);
+        toast({
+          title: "Login Failed",
+          description: `${error.message}`,
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -95,9 +121,13 @@ const AuthForm = ({ type }: any) => {
           Register
         </LoadingButton>
       ) : (
-        <Button type="submit" className="w-full">
+        <LoadingButton
+          type="submit"
+          loading={isSubmitting}
+          onClick={handleSubmit}
+        >
           Login
-        </Button>
+        </LoadingButton>
       )}
     </>
   );
